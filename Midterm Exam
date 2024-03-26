@@ -1,0 +1,59 @@
+CREATE PROCEDURE sp_getStoreOrderInfoById
+  @storeId INT
+AS
+BEGIN
+  SELECT
+    CONCAT(‘StoreId-‘, s.store_id, ‘ ‘, s.store_name) AS ‘Store Info’,
+    CONCAT(st.last_name, ‘,’, st.first_name) AS ‘Staff Attendee’,
+    CONCAT(c.last_name, ‘,’, c.first_name) AS ‘Customer Name’,
+    CONCAT(‘OR#’, o.order_id,
+      CASE
+        WHEN o.order_status = 1 THEN ‘-PENDING’
+        WHEN o.order_status = 2 THEN ‘-PAID’
+        WHEN o.order_status = 3 THEN ‘-FOR DELIVERY’
+        ELSE ‘-DELIVERED’
+      END) AS ‘Order Status’,
+    o.order_date
+  FROM orders o
+  JOIN stores s ON o.store_id = s.store_id
+  JOIN staffs st ON o.staff_id = st.staff_id
+  JOIN customers c ON o.customer_id = c.customer_id
+  WHERE o.store_id = @storeId
+  ORDER BY o.order_date DESC
+END
+EXEC sp_getStoreOrderInfoById 1
+
+OR ----------------------------------------------------------------------
+CREATE PROCEDURE sp_getStoreOrderInfoById @storeId int
+
+AS
+
+SELECT
+
+CONCAT(‘StoreId-‘,s.store_id,’’, s.store_name) as ‘Store Info’, CONCAT(st.last_name,’,’,st.first_name) as ‘Staff Attendee’, CONCAT(c.last_name, CASE ‘c.first_name) as ‘Customer Name’,
+
+WHEN o.order_status = 1 THEN CONCAT(‘OR#’,o.order_id, ‘-PENDING’)
+
+WHEN o.order_status = 2 THEN CONCAT(‘OR#’,o.order_id, ‘-PAID’)
+
+WHEN o.order_status = 3 THEN CONCAT(‘OR#’,o.order_id, ‘-FOR DELIVERY’)
+
+ELSE CONCAT(‘OR#’, o.order_id, ‘-DELIVERED’)
+
+END AS ‘Order Status’,
+
+o.order_date
+
+FROM orders o
+
+JOIN stores s on o.store_id = s.store_id
+
+JOIN staffs st on o.staff_id=st.staff_id
+
+JOIN customers con o.customer_id = c.customer_id
+
+WHERE o.store_id = @storeId
+
+ORDER BY 0.order_date desc
+
+EXEC sp_getStoreOrderInfoById 1 
